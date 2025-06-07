@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MakeMyQR - QR Code Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #f4f0ff, #eaf3ff);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .main-title {
+      color: #3c56f5;
+      font-weight: 700;
+    }
+    .sub-heading {
+      color: #555;
+      font-size: 1.2rem;
+    }
+    .btn-purple {
+      background-color: #5f3dc4;
+      border: none;
+      color: #fff;
+      font-weight: 600;
+      padding: 10px 25px;
+      border-radius: 25px;
+      box-shadow: 0 5px 10px rgba(95, 61, 196, 0.3);
+    }
+    .feature-box {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .feature-box:hover {
+      transform: translateY(-5px);
+    }
+    .feature-icon {
+      font-size: 2rem;
+      color: #6f42c1;
+    }
+
+    /* QR Generator specific */
+    .card {
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    }
+    .qr-preview {
+      border-radius: 16px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      max-width: 240px;
+      margin: auto;
+    }
+    .btn-png {
+      background-color: #3b82f6;
+      color: #fff;
+    }
+    .btn-jpg {
+      background-color: #10b981;
+      color: #fff;
+    }
+    .btn-svg {
+      background-color: #8b5cf6;
+      color: #fff;
+    }
+    .form-select, .form-control {
+      border-radius: 8px;
+    }
+    .upload-box {
+      border: 2px dashed #ccc;
+      border-radius: 12px;
+      text-align: center;
+      padding: 30px;
+      color: #666;
+      cursor: pointer;
+    }
+    .upload-box:hover {
+      background-color: #f9f9f9;
+    }
+    .text-purple {
+      color: #8b5cf6 !important;
+    }
+
+    /* Testimonial section */
+    .rounded-4 {
+      border-radius: 1rem !important;
+    }
+
+    /* Footer */
+    footer {
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Main Hero Section -->
+  <div class="container text-center py-5">
+    <p class="text-muted">Hey, there! 👋</p>
+    <h1 class="main-title display-5">MakeMyQR</h1>
+    <h2 class="fw-light mb-3">SCAN MADE SIMPLE</h2>
+    <p class="sub-heading mb-4">Make every interaction smarter with custom QR Codes in seconds. Beautiful, customizable, and ready to download.</p>
+    <button class="btn btn-purple mb-5">Create QR Code</button>
+
+    <div class="row g-4 justify-content-center mb-5">
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon mb-3">🔳</div>
+          <h5>QR Code Generation</h5>
+          <p class="text-muted">Create QR codes instantly from any URL with customizable styling options</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon mb-3">🎨</div>
+          <h5>Custom Styling</h5>
+          <p class="text-muted">Personalize with colors, gradients, logos, and various design patterns</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon mb-3">⬇️</div>
+          <h5>Multiple Formats</h5>
+          <p class="text-muted">Download in PNG, JPG, or SVG format for any use case</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Generator Section -->
+  <div class="container py-5">
+    <div class="row g-4 justify-content-center">
+
+      <!-- QR Code Preview -->
+      <div class="col-md-5">
+        <div class="card p-4 text-center">
+          <h5 class="fw-bold text-purple mb-3">QR Code Preview</h5>
+          <img src="https://via.placeholder.com/240x240.png?text=QR+Code" alt="QR Code" class="qr-preview mb-4" />
+          <div class="d-flex justify-content-around">
+            <button class="btn btn-png px-4"><i class="bi bi-download me-1"></i>PNG</button>
+            <button class="btn btn-jpg px-4"><i class="bi bi-download me-1"></i>JPG</button>
+            <button class="btn btn-svg px-4"><i class="bi bi-download me-1"></i>SVG</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customization Form -->
+      <div class="col-md-5">
+        <div class="card p-4">
+          <h5 class="fw-bold text-purple mb-3">Customize Your QR Code</h5>
+
+          <div class="mb-3">
+            <label class="form-label">URL or Text</label>
+            <input type="text" class="form-control" placeholder="https://example.com" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Color Palette</label>
+            <select class="form-select">
+              <option>Purple Gradient</option>
+              <option>Blue Gradient</option>
+              <option>Green Shades</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">QR Code Style</label>
+            <select class="form-select">
+              <option>Dots</option>
+              <option>Squares</option>
+              <option>Rounded</option>
+            </select>
+          </div>
+
+          <div class="mb-2">
+            <label class="form-label">Logo (Optional)</label>
+            <div class="upload-box">
+              <i class="bi bi-upload" style="font-size: 24px;"></i><br />
+              Click to upload logo<br />
+              <small>Max 5MB</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Testimonials Section -->
+  <section class="py-5" style="background: linear-gradient(to right, #f4f0ff, #eaf3ff);">
+    <div class="container text-center">
+      <h4 class="fw-bold text-primary mb-1" style="color: #8b5cf6;">Trusted by Thousands of</h4>
+      <h2 class="fw-bold mb-3">Happy Customers</h2>
+      <p class="text-muted mb-5">Here's what some of our customers say:</p>
+
+      <div class="row g-4 justify-content-center">
+
+        <!-- Testimonial Card 1 -->
+        <div class="col-md-4">
+          <div class="card p-4 shadow-sm border-0 rounded-4">
+            <div class="mb-3">
+              <div
+                class="rounded-circle mx-auto d-flex align-items-center justify-content-center"
+                style="width: 60px; height: 60px; background: linear-gradient(45deg, #6d28d9, #3b82f6); color: white; font-weight: bold;"
+              >
+                AP
+              </div>
+            </div>
+            <h5 class="fw-bold mb-0">Aaron Peters</h5>
+            <p class="text-purple mb-2">Developer</p>
+            <p class="fst-italic text-muted small">
+              "The MakeMyQR service is top-notch. It's fast, simple, and beautifully styled! The customization options are fantastic."
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimonial Card 2 -->
+        <div class="col-md-4">
+          <div class="card p-4 shadow-sm border-0 rounded-4">
+            <div class="mb-3">
+              <div
+                class="rounded-circle mx-auto d-flex align-items-center justify-content-center"
+                style="width: 60px; height: 60px; background: linear-gradient(45deg, #6d28d9, #3b82f6); color: white; font-weight: bold;"
+              >
+                BS
+              </div>
+            </div>
+            <h5 class="fw-bold mb-0">Bhavya S</h5>
+            <p class="text-purple mb-2">Designer</p>
+            <p class="fst-italic text-muted small">
+              "This platform has a smooth and clean UI. I love customizing and generating cool QR codes with different gradients!"
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimonial Card 3 -->
+        <div class="col-md-4">
+          <div class="card p-4 shadow-sm border-0 rounded-4">
+            <div class="mb-3">
+              <div
+                class="rounded-circle mx-auto d-flex align-items-center justify-content-center"
+                style="width: 60px; height: 60px; background: linear-gradient(45deg, #6d28d9, #3b82f6); color: white; font-weight: bold;"
+              >
+                SJ
+              </div>
+            </div>
+            <h5 class="fw-bold mb-0">Sarah Johnson</h5>
+            <p class="text-purple mb-2">Marketing Manager</p>
+            <p class="fst-italic text-muted small">
+              "Perfect for our marketing campaigns. The ability to add logos and customize colors makes our QR codes stand out."
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white shadow-sm rounded-4 mx-auto my-5 py-4 text-center" style="max-width: 900px;">
+  <h5 class="fw-bold" style="color: #7c3aed;">MakeMyQR</h5>
+
+  <div class="mb-2">
+    <a href="#" class="text-dark mx-2 fw-semibold text-decoration-none">Instagram</a>
+    <a href="#" class="text-dark mx-2 fw-semibold text-decoration-none">Twitter</a>
+    <a href="#" class="text-dark mx-2 fw-semibold text-decoration-none">LinkedIn</a>
+  </div>
+
+  <small class="text-muted">
+    Made with <span style="color: #e11d48;">❤️</span> by Evita Sharon Barboza
+  </small>
+</footer>
+
+
+</body>
+</html>

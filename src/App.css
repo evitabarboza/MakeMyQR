@@ -48,3 +48,13 @@
 .fade-in {
   animation: fade-in 0.8s ease-out;
 }
+
+/* App.css */
+.full-page-bg {
+  background: linear-gradient(to bottom right, #e2d5f8, #f4effa); /* Your purple gradient */
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
