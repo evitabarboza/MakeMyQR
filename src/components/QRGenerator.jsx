@@ -348,29 +348,29 @@
 // export default QRGenerator;
 
 
-
 import React, { useEffect, useRef, useState } from 'react';
 import QRCodeStyling from 'qr-code-styling';
-import '../App.css'; // Optional: for .btn-purple and .qr-box styles
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../App.css';
 
 const QRGenerator = () => {
   const qrRef = useRef(null);
   const [url, setUrl] = useState('https://example.com');
-  const [size, setSize] = useState(300);
   const [qrStyle, setQrStyle] = useState('dots');
-  const [startColor, setStartColor] = useState('#007CF0');
-  const [endColor, setEndColor] = useState('#7928CA');
-
+  const [colorPalette, setColorPalette] = useState('purple');
   const [logoImage, setLogoImage] = useState(null);
-  const [logoSizePercent, setLogoSizePercent] = useState(20);
-  const [logoBorderColor, setLogoBorderColor] = useState('#ffffff');
-  const [logoShape, setLogoShape] = useState('circle');
-  const [logoPadding, setLogoPadding] = useState(true);
 
+  const colorOptions = {
+    purple: ['#7928CA', '#2E1A47'],
+    blue: ['#007CF0', '#00DFD8'],
+    green: ['#00C853', '#64DD17'],
+  };
+
+  // Initialize QRCodeStyling with logoImage if available
   const qrCode = useRef(
     new QRCodeStyling({
-      width: size,
-      height: size,
+      width: 300,
+      height: 300,
       data: url,
       type: 'canvas',
       dotsOptions: {
@@ -378,258 +378,230 @@ const QRGenerator = () => {
         gradient: {
           type: 'linear',
           colorStops: [
-            { offset: 0, color: startColor },
-            { offset: 1, color: endColor },
+            { offset: 0, color: colorOptions[colorPalette][0] },
+            { offset: 1, color: colorOptions[colorPalette][1] },
           ],
         },
       },
-      backgroundOptions: { color: '#ffffff' },
+      backgroundOptions: {
+        color: '#ffffff',
+      },
+      image: logoImage || undefined,
+      imageOptions: {
+        crossOrigin: 'anonymous',
+        margin: 5,
+      },
     })
   );
 
   useEffect(() => {
+    // Update QR code config on changes
     qrCode.current.update({
       data: url,
-      width: size,
-      height: size,
       dotsOptions: {
         type: qrStyle,
         gradient: {
           type: 'linear',
           colorStops: [
-            { offset: 0, color: startColor },
-            { offset: 1, color: endColor },
+            { offset: 0, color: colorOptions[colorPalette][0] },
+            { offset: 1, color: colorOptions[colorPalette][1] },
           ],
         },
       },
+      image: logoImage || undefined, // Update logo on QR
+      imageOptions: {
+        crossOrigin: 'anonymous',
+        margin: 5,
+      },
     });
 
-    if (qrRef.current.firstChild) {
-      qrRef.current.firstChild.remove();
-    }
+    // Remove old QR code canvas and append new
+    if (qrRef.current.firstChild) qrRef.current.firstChild.remove();
     qrCode.current.append(qrRef.current);
-  }, [url, size, qrStyle, startColor, endColor]);
+  }, [url, qrStyle, colorPalette, logoImage]);
 
   const handleLogoUpload = (e) => {
     const file = e.target.files[0];
     if (file) setLogoImage(URL.createObjectURL(file));
   };
 
-  const downloadWithLogo = (ext) => {
-    const qrCanvas = qrRef.current.querySelector('canvas');
-    if (!qrCanvas) return alert('QR code not ready yet!');
-
-    const combinedCanvas = document.createElement('canvas');
-    combinedCanvas.width = qrCanvas.width;
-    combinedCanvas.height = qrCanvas.height;
-    const ctx = combinedCanvas.getContext('2d');
-    ctx.drawImage(qrCanvas, 0, 0);
-
-    if (logoImage) {
-      const logoSizePx = (logoSizePercent / 100) * combinedCanvas.width;
-      const x = (combinedCanvas.width - logoSizePx) / 2;
-      const y = (combinedCanvas.height - logoSizePx) / 2;
-      const paddingPx = logoPadding ? 8 : 0;
-      const bgSize = logoSizePx + 2 * paddingPx;
-
-      ctx.fillStyle = '#fff';
-      if (logoShape === 'circle') {
-        ctx.beginPath();
-        ctx.arc(combinedCanvas.width / 2, combinedCanvas.height / 2, bgSize / 2, 0, Math.PI * 2);
-        ctx.fill();
-      } else {
-        ctx.fillRect(x - paddingPx, y - paddingPx, bgSize, bgSize);
-      }
-
-      if (logoBorderColor) {
-        ctx.strokeStyle = logoBorderColor;
-        ctx.lineWidth = 2;
-        if (logoShape === 'circle') {
-          ctx.beginPath();
-          ctx.arc(combinedCanvas.width / 2, combinedCanvas.height / 2, bgSize / 2, 0, Math.PI * 2);
-          ctx.stroke();
-        } else {
-          ctx.strokeRect(x - paddingPx, y - paddingPx, bgSize, bgSize);
-        }
-      }
-
-      const logoImg = new Image();
-      logoImg.crossOrigin = 'anonymous';
-      logoImg.src = logoImage;
-      logoImg.onload = () => {
-        ctx.save();
-        if (logoShape === 'circle') {
-          ctx.beginPath();
-          ctx.arc(combinedCanvas.width / 2, combinedCanvas.height / 2, logoSizePx / 2, 0, Math.PI * 2);
-          ctx.clip();
-        }
-        ctx.drawImage(logoImg, x, y, logoSizePx, logoSizePx);
-        ctx.restore();
-
-        if (ext === 'svg') {
-          alert('SVG download with logo not supported. Downloading PNG instead.');
-          ext = 'png';
-        }
-
-        combinedCanvas.toBlob((blob) => {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `qr-code.${ext}`;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          URL.revokeObjectURL(url);
-        }, ext === 'jpg' ? 'image/jpeg' : 'image/png');
-      };
-      logoImg.onerror = () => alert('Failed to load logo image.');
-    } else {
-      qrCode.current.download({ extension: ext });
-    }
+  const download = (ext) => {
+    qrCode.current.download({ extension: ext });
   };
 
   return (
-    <div className="container py-5">
-      {/* Header */}
-      <nav className="navbar navbar-expand-lg bg-white shadow-sm mb-5">
-        <div className="container">
-          <a className="navbar-brand fw-bold text-primary" href="#">MakeMyQR</a>
-          <div className="ms-auto">
-            <a href="#" className="nav-link d-inline">About</a>
-            <a href="#" className="nav-link d-inline">Contact</a>
+    <>
+      {/* Hero Section */}
+      <div className="container text-center py-5">
+        <p className="text-muted">Hey, there! 👋</p>
+        <h1 className="main-title display-5">MakeMyQR</h1>
+        <h2 className="fw-light mb-3">SCAN MADE SIMPLE</h2>
+        <p className="sub-heading mb-4">
+          Make every interaction smarter with custom QR Codes in seconds. Beautiful, customizable, and ready to download.
+        </p>
+        <button className="btn btn-purple mb-5">Create QR Code</button>
+
+        <div className="row g-4 justify-content-center mb-5">
+          <div className="col-md-4">
+            <div className="feature-box">
+              <div className="feature-icon mb-3">🔳</div>
+              <h5>QR Code Generation</h5>
+              <p className="text-muted">Create QR codes instantly from any URL with customizable styling options</p>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="feature-box">
+              <div className="feature-icon mb-3">🎨</div>
+              <h5>Custom Styling</h5>
+              <p className="text-muted">Personalize with colors, gradients, logos, and various design patterns</p>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="feature-box">
+              <div className="feature-icon mb-3">⬇️</div>
+              <h5>Multiple Formats</h5>
+              <p className="text-muted">Download in PNG, JPG, or SVG format for any use case</p>
+            </div>
           </div>
         </div>
-      </nav>
+      </div>
 
-      {/* Hero */}
-      <section className="text-center mb-5">
-        <h5 className="text-secondary">Hey, there!</h5>
-        <h1 className="fw-bold">MakeMyQR<br /><span className="text-muted">SCAN MADE SIMPLE</span></h1>
-        <p>Make every interaction smarter with custom QR Codes in seconds.</p>
-        <a href="#qr" className="btn btn-purple px-4 mt-2">Enter URL</a>
-      </section>
+      {/* QR Generator */}
+      <div className="container py-5">
+        <div className="row g-4 justify-content-center">
+          {/* Customize QR Panel */}
+          <div className="col-md-5">
+            <div className="card p-4">
+              <h5 className="fw-bold text-purple mb-3">Customize Your QR Code</h5>
+              <div className="mb-3">
+                <label className="form-label">URL or Text</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://example.com"
+                />
+              </div>
 
-      {/* Services */}
-      <section className="row text-center mb-4">
-        <div className="col-md-4">QR Code Generation</div>
-        <div className="col-md-4">QR Code Customization</div>
-        <div className="col-md-4">Download in Multiple Formats</div>
-      </section>
+              <div className="mb-3">
+                <label className="form-label">Color Palette</label>
+                <select className="form-select" value={colorPalette} onChange={(e) => setColorPalette(e.target.value)}>
+                  <option value="purple">Purple Gradient</option>
+                  <option value="blue">Blue Gradient</option>
+                  <option value="green">Green Shades</option>
+                </select>
+              </div>
 
-      {/* QR Code Generator */}
-      <section id="qr" className="qr-box mx-auto" style={{ maxWidth: 600 }}>
-        <div className="text-center mb-4" style={{ position: 'relative' }}>
-          <div ref={qrRef} style={{ width: size, height: size, margin: '0 auto' }} />
-          {logoImage && (
-  <img
-    src={logoImage}
-    alt="Logo"
-    style={{
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      width: `${logoSizePercent}%`,
-      aspectRatio: '1 / 1',           // Add this line to force square
-      height: 'auto',                 // change height to auto, width drives the size
-      transform: 'translate(-50%, -50%)',
-      borderRadius: logoShape === 'circle' ? '50%' : '0%',
-      objectFit: 'cover',             // change from 'contain' to 'cover' to fill square
-      backgroundColor: 'white',
-      padding: logoPadding ? '4px' : '0px',
-      boxSizing: 'border-box',
-      border: `2px solid ${logoBorderColor}`,
-      boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-      pointerEvents: 'none',
-    }}
-  />
-)}
+              <div className="mb-3">
+                <label className="form-label">QR Code Style</label>
+                <select className="form-select" value={qrStyle} onChange={(e) => setQrStyle(e.target.value)}>
+                  <option value="dots">Dots</option>
+                  <option value="square">Squares</option>
+                  <option value="rounded">Rounded</option>
+                </select>
+              </div>
 
-        </div>
-
-        <input className="form-control mb-2" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="Enter URL" />
-
-        <div className="row my-3">
-          <div className="col">
-            <label>Primary Color</label>
-            <input type="color" className="form-control form-control-color" value={startColor} onChange={(e) => setStartColor(e.target.value)} />
+              <div className="mb-2">
+                <label className="form-label">Logo (Optional)</label>
+                <label className="upload-box text-center d-block p-3 border border-secondary rounded" style={{ cursor: 'pointer' }}>
+                  <i className="bi bi-upload" style={{ fontSize: 24 }}></i>
+                  <br />
+                  Click to upload logo<br />
+                  <small>Max 5MB</small>
+                  <input type="file" className="d-none" onChange={handleLogoUpload} />
+                </label>
+              </div>
+            </div>
           </div>
-          <div className="col">
-            <label>Secondary Color</label>
-            <input type="color" className="form-control form-control-color" value={endColor} onChange={(e) => setEndColor(e.target.value)} />
+
+          {/* QR Preview Panel */}
+          <div className="col-md-5">
+            <div className="card p-4 text-center">
+              <h5 className="fw-bold text-purple mb-3">QR Code Preview</h5>
+              <div ref={qrRef} className="mb-4" />
+              <div className="d-flex justify-content-around">
+                <button className="btn btn-png px-4" onClick={() => download('png')}>PNG</button>
+                <button className="btn btn-jpg px-4" onClick={() => download('jpg')}>JPG</button>
+                <button className="btn btn-svg px-4" onClick={() => download('svg')}>SVG</button>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
 
-        <select className="form-select mb-2" value={qrStyle} onChange={(e) => setQrStyle(e.target.value)}>
-          <option value="dots">Dots</option>
-          <option value="rounded">Rounded</option>
-          <option value="square">Square</option>
-          <option value="extra-rounded">Extra Rounded</option>
-          <option value="classy">Classy</option>
-          <option value="classy-rounded">Classy Rounded</option>
-        </select>
+      {/* Testimonials Section */}
+      <section className="py-5" style={{ background: 'linear-gradient(to right, #f4f0ff, #eaf3ff)' }}>
+        <div className="container text-center">
+          <h4 className="fw-bold mb-1" style={{ color: '#8b5cf6' }}>Trusted by Thousands of</h4>
+          <h2 className="fw-bold mb-3">Happy Customers</h2>
+          <p className="text-muted mb-5">Here's what some of our customers say:</p>
 
-        <input type="file" className="form-control mb-2" onChange={handleLogoUpload} />
-
-        {logoImage && (
-          <>
-            <label>Logo Size: {logoSizePercent}%</label>
-            <input type="range" className="form-range mb-2" min="5" max="100" value={logoSizePercent} onChange={(e) => setLogoSizePercent(Number(e.target.value))} />
-
-            <label>Border Color:</label>
-            <input type="color" className="form-control form-control-color mb-2" value={logoBorderColor} onChange={(e) => setLogoBorderColor(e.target.value)} />
-
-            <label>Shape:</label>
-            <select className="form-select mb-2" value={logoShape} onChange={(e) => setLogoShape(e.target.value)}>
-              <option value="circle">Circle</option>
-              <option value="square">Square</option>
-            </select>
-
-            <div className="form-check mb-2">
-              <input type="checkbox" className="form-check-input" id="logoPadding" checked={logoPadding} onChange={(e) => setLogoPadding(e.target.checked)} />
-              <label className="form-check-label" htmlFor="logoPadding">Enable Logo Padding</label>
-            </div>
-          </>
-        )}
-
-        <label>File Format:</label>
-        <div className="d-flex justify-content-around mt-3">
-          <button className="btn btn-primary" onClick={() => downloadWithLogo('png')}>Download PNG</button>
-          <button className="btn btn-success" onClick={() => downloadWithLogo('jpg')}>Download JPG</button>
-          <button className="btn btn-dark" onClick={() => downloadWithLogo('svg')}>Download SVG</button>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="map-section text-center mt-5 py-5">
-        <h4 className="fw-bold">Trusted by Thousands of<br />Happy Customers</h4>
-        <p>Here's what some of our customers say:</p>
-        <div className="container">
-          <div className="row justify-content-center mt-4">
-            <div className="col-md-4 testimonial">
-              <p><strong>Aaron Peters</strong></p>
-              <p>The MakeMyQR service is top-notch. It's fast, simple, and beautifully styled!</p>
-            </div>
-            <div className="col-md-4 testimonial">
-              <p><strong>Bhavya S</strong></p>
-              <p>This platform has a smooth and clean UI. I love customizing and generating cool QR codes!</p>
-            </div>
+          <div className="row g-4 justify-content-center">
+            {[
+              {
+                initials: 'AP',
+                name: 'Aaron Peters',
+                role: 'Developer',
+                feedback:
+                  'The MakeMyQR service is top-notch. It\'s fast, simple, and beautifully styled! The customization options are fantastic.',
+              },
+              {
+                initials: 'BS',
+                name: 'Bhavya S',
+                role: 'Designer',
+                feedback:
+                  'This platform has a smooth and clean UI. I love customizing and generating cool QR codes with different gradients!',
+              },
+              {
+                initials: 'SJ',
+                name: 'Sarah Johnson',
+                role: 'Marketing Manager',
+                feedback:
+                  'Perfect for our marketing campaigns. The ability to add logos and customize colors makes our QR codes stand out.',
+              },
+            ].map((t, idx) => (
+              <div className="col-md-4" key={idx}>
+                <div className="card p-4 shadow-sm border-0 rounded-4">
+                  <div className="mb-3">
+                    <div
+                      className="rounded-circle mx-auto d-flex align-items-center justify-content-center"
+                      style={{
+                        width: '60px',
+                        height: '60px',
+                        background: 'linear-gradient(45deg, #6d28d9, #3b82f6)',
+                        color: 'white',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      {t.initials}
+                    </div>
+                  </div>
+                  <h5 className="fw-bold mb-0">{t.name}</h5>
+                  <p className="text-purple mb-2">{t.role}</p>
+                  <p className="fst-italic text-muted small">"{t.feedback}"</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-white text-center" style={{ marginBottom: 0 }}>
-
-        <p className="fw-bold">MakeMyQR</p>
-        <p>
-          <a href="#" className="text-decoration-none mx-2">Instagram</a>
-          <a href="#" className="text-decoration-none mx-2">Twitter</a>
-          <a href="#" className="text-decoration-none mx-2">LinkedIn</a>
-        </p>
-        <small>Made with Love by Evita Sharon Barboza</small>
+      <footer className="bg-white shadow-sm rounded-4 mx-auto my-5 py-4 text-center" style={{ maxWidth: '900px' }}>
+        <h5 className="fw-bold" style={{ color: '#7c3aed' }}>MakeMyQR</h5>
+        <div className="mb-2">
+          <a href="#" className="text-dark mx-2 fw-semibold text-decoration-none">Instagram</a>
+          <a href="#" className="text-dark mx-2 fw-semibold text-decoration-none">Twitter</a>
+          <a href="#" className="text-dark mx-2 fw-semibold text-decoration-none">LinkedIn</a>
+        </div>
+        <small className="text-muted">
+          Made with <span style={{ color: '#e11d48' }}>❤️</span> by Evita Sharon Barboza
+        </small>
       </footer>
-    </div>
+    </>
   );
 };
 
 export default QRGenerator;
+
