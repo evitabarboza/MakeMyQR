@@ -1,14 +1,7 @@
-Here’s a professional, well-structured `README.md` file tailored for your **custom QR Code Generator** built with **React**, **Vite**, **Bootstrap**, and `qr-code-styling`. It highlights features, setup instructions, and usage:
-
----
-
-````markdown
 # 🎨 MakeMyQR - Custom QR Code Generator
 
 **MakeMyQR** is a highly customizable QR code generator built using **React + Vite**. It allows users to create stylish and branded QR codes with gradients, logos, and various styling options.
-Live link: `https://make-my-qr-git-main-evita-barbozas-projects.vercel.app/`
-
----
+- Live link: https://make-my-qr-git-main-evita-barbozas-projects.vercel.app/
 
 ## 🚀 Features
 
@@ -24,7 +17,6 @@ Live link: `https://make-my-qr-git-main-evita-barbozas-projects.vercel.app/`
 - ⚙️ **Live Preview**: See changes applied instantly as you customize.
 
 
----
 
 ## 🛠️ Tech Stack
 
@@ -33,7 +25,7 @@ Live link: `https://make-my-qr-git-main-evita-barbozas-projects.vercel.app/`
 - 🎨 Bootstrap 5
 - 🧩 [qr-code-styling](https://github.com/kozakdenys/qr-code-styling) library
 
----
+
 
 ## 📦 Installation
 
@@ -45,7 +37,7 @@ cd MakeMyQR
 npm install
 ````
 
----
+
 
 ## 🧪 Running Locally
 
@@ -58,7 +50,6 @@ npm run dev
 Open your browser and navigate to:
 [http://localhost:5173](http://localhost:5173)
 
----
 
 ## 🖼️ Folder Structure
 
@@ -73,7 +64,7 @@ public/
 ├── index.html
 ```
 
----
+
 
 ## 📥 Download Options
 
@@ -83,8 +74,6 @@ Users can export QR codes as:
 * `.jpg`
 * `.svg`
 
----
-
 ## ✅ Future Improvements
 
 * 🔄 QR code scanning preview
@@ -93,19 +82,17 @@ Users can export QR codes as:
 * 🖱️ Drag & drop logo upload
 * 🧪 QR validation / error correction levels
 
----
+
 
 ## 🤝 Contributing
 
 Pull requests are welcome! For major changes, open an issue first to discuss what you'd like to change.
 
----
 
 ## 📄 License
 
 MIT © 2025 \[Evita Sharon Barboza]
 
----
 
 ## 💡 Credits
 
@@ -114,5 +101,3 @@ Thanks to:
 * [qr-code-styling](https://github.com/kozakdenys/qr-code-styling)
 * [Bootstrap](https://getbootstrap.com)
 * [Vite](https://vitejs.dev)
-
-```
