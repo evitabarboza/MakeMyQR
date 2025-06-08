@@ -1,37 +1,10 @@
-/* app.css */
-
+/* Your existing CSS unchanged */
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
-
-/* .btn-purple {
-  background: linear-gradient(90deg, #7928CA 0%, #FF0080 100%);
-  border: none;
-  color: white;
-  transition: all 0.3s ease-in-out;
-}
-.btn-purple:hover {
-  opacity: 0.9;
-  transform: scale(1.02);
-}
-
-.qr-box {
-  background-color: #f9f9f9;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.testimonial {
-  background-color: #ffffff;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  margin: 1rem;
-} */
 
 /* Optional: Animate logos or titles */
 @keyframes fade-in {
@@ -49,9 +22,13 @@
   animation: fade-in 0.8s ease-out;
 }
 
-/* App.css */
 .full-page-bg {
-  background: linear-gradient(to bottom right, #e2d5f8, #f4effa); /* Your purple gradient */
+  background: linear-gradient(
+    135deg, 
+    #6a1b9a 0%,     /* Dark purple */
+    #9c27b0 50%,    /* Medium purple */
+    #ce93d8 100%    /* Light purple */
+  );
   min-height: 100vh;
   padding: 0;
   margin: 0;
@@ -59,9 +36,38 @@
   color: #333;
 }
 
+
+/* Updated Create My QR button style */
 .btn-purple {
-  background-color: #7928CA;
-  color: white;
+  background: linear-gradient(90deg, #5c277e 0%, #4b0b6e 100%);
+  color: #fff;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-purple:hover,
+.btn-purple:focus {
+  opacity: 0.95;
+  transform: scale(1.05);
+  outline: none;
+  color: azure;
+}
+
+/* Heading style */
+h1, .heading {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 3rem;
+  color: #4a148c;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px 3px rgba(74, 20, 140, 0.3);
 }
 
 .text-purple {
@@ -87,16 +93,301 @@
   text-align: center;
 }
 
-.btn-purple {
+/* ========================= */
+/* ADDITIONS START HERE       */
+/* ========================= */
+
+/* Paragraphs */
+p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 1rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Links */
+a {
+  color: #7928CA;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+a:hover, a:focus {
+  color: #4a148c;
+  text-decoration: underline;
+}
+
+/* Inputs and textareas */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0 1.5rem;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Segoe UI', sans-serif;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #5c277e;
+  box-shadow: 0 0 8px rgba(92, 39, 126, 0.6);
+  outline: none;
+  background: #faf7ff;
+}
+
+/* Labels */
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #4a148c;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+}
+
+/* Buttons (other than btn-purple) */
+button {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
   background-color: #7928CA;
   color: white;
+  border: none;
+  padding: 0.6rem 1.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 3px 8px rgba(121, 40, 202, 0.3);
 }
-.text-purple {
-  color: #7928CA;
+button:hover,
+button:focus {
+  background-color: #4a148c;
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(74, 20, 140, 0.6);
+  outline: none;
 }
-.feature-box {
-  padding: 20px;
-  border: 1px solid #eee;
-  border-radius: 10px;
-  background: #f9f9f9;
+
+/* Forms */
+form {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fefefe;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(74, 20, 140, 0.1);
+}
+
+/* Lists */
+ul, ol {
+  max-width: 700px;
+  margin: 1rem auto 2rem;
+  text-align: left;
+  padding-left: 1.4rem;
+  color: #555;
+}
+li {
+  margin-bottom: 0.5rem;
+  font-size: 1.05rem;
+}
+
+/* Section containers */
+section {
+  margin: 3rem auto;
+  max-width: 1100px;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(74, 20, 140, 0.08);
+}
+
+/* Small text */
+small, .small-text {
+  font-size: 0.85rem;
+  color: #999;
+  font-style: italic;
+}
+
+/* Blockquotes */
+blockquote {
+  font-style: italic;
+  color: #6a4a86;
+  border-left: 4px solid #7928CA;
+  padding-left: 1rem;
+  margin: 1.5rem auto;
+  max-width: 600px;
+}
+
+/* Images inside content */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(74, 20, 140, 0.1);
+  margin: 1.5rem 0;
+}
+
+/* Horizontal Rule */
+hr {
+  border: none;
+  border-top: 2px solid #7928CA;
+  margin: 2rem auto;
+  max-width: 700px;
+}
+
+/* Utility helpers */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+/* Responsive container padding */
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+  form {
+    padding: 1.5rem;
+  }
+  h1, .heading {
+    font-size: 2.2rem;
+  }
+}
+
+/* ========================= */
+/* ADDITIONS START HERE       */
+/* ========================= */
+
+/* "SCAN MADE SIMPLE" heading */
+.scan-made-simple {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-style: oblique;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #6a1b9a; /* deep purple */
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: 0.5rem;
+  animation: fade-in 1s ease forwards;
+}
+
+/* Subtitle paragraph below it */
+.scan-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #4a148c;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fade-in 1.5s ease forwards;
+}
+
+/* Jumping popping vibe animation */
+@keyframes jump-pop {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-15px) scale(1.1);
+  }
+  50% {
+    transform: translateY(0) scale(1.05);
+  }
+  75% {
+    transform: translateY(-7px) scale(1.08);
+  }
+}
+
+/* Animated "Hey, there! 👋" text */
+.jumping-pop {
+  display: inline-block;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  color: #8e24aa; /* brighter purple */
+  animation: jump-pop 1.2s ease-in-out infinite;
+  cursor: default;
+  user-select: none;
+  margin-bottom: 1.5rem;
+}
+
+/* ========================= */
+/* ADDITIONS END             */
+/* Purple gradient background for the whole page */
+body, html {
+  background: linear-gradient(135deg, #a3a1ae, #ac92eb, #a79db8);
+  min-height: 100vh;
+  color: white;
+}
+
+/* Light grayish background for feature boxes with modern card look */
+
+/* Button colors for PNG, JPG, SVG */
+.btn-png-color {
+  background-color: #4CAF50;  /* green */
+  color: white;
+  border: none;
+}
+.btn-png-color:hover {
+  background-color: #45a049;
+  color: whitesmoke;
+}
+
+.btn-jpg-color {
+  background-color: #2196F3; /* blue */
+  color: white;
+  border: none;
+}
+.btn-jpg-color:hover {
+  background-color: #0b7dda;
+  color: whitesmoke;
+}
+
+.btn-svg-color {
+  background-color: #FF9800; /* orange */
+  color: white;
+  border: none;
+}
+.btn-svg-color:hover {
+  background-color: #e67e00;
+  color: whitesmoke;
 }
