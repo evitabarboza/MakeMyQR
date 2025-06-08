@@ -103,115 +103,128 @@ const QRGenerator = () => {
   };
 
   const download = (ext) => {
-    if (!qrRef.current) return;
-    const qrCanvas = qrRef.current.querySelector('canvas');
-    if (!qrCanvas) return;
+  if (!qrRef.current) return;
+  const qrCanvas = qrRef.current.querySelector('canvas');
+  if (!qrCanvas) return;
 
-    if (!logoImage) {
-      // No logo, just download QR directly
-      qrCode.current.download({ extension: ext });
-      return;
+  // Check if trying to download SVG with logo
+  if (ext === 'svg' && logoImage) {
+    alert('QR code with logo cannot be downloaded in SVG format. Please try JPG or PNG format instead.');
+    return;
+  }
+
+  if (!logoImage) {
+    // No logo, just download QR directly
+    qrCode.current.download({ extension: ext });
+    return;
+  }
+
+  // For PNG and JPG with logo
+  if (ext === 'svg') {
+    // This shouldn't happen due to the check above, but just in case
+    qrCode.current.download({ extension: ext });
+    return;
+  }
+
+  // Create offscreen canvas same size as QR
+  const canvas = document.createElement('canvas');
+  const size = qrCanvas.width; // assuming square canvas
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  // Draw QR code
+  ctx.drawImage(qrCanvas, 0, 0);
+
+  // Draw logo image on center
+  const logoImg = new Image();
+  logoImg.crossOrigin = 'anonymous';
+  logoImg.src = logoImage;
+
+  logoImg.onload = () => {
+    // Calculate position and size for logo on QR
+    const logoSize = logoScale; // same as user's setting
+    const x = (size - logoSize) / 2;
+    const y = (size - logoSize) / 2;
+
+    // Draw white background behind logo to simulate padding if enabled
+    if (logoPaddingEnabled) {
+      const padding = logoPadding;
+      ctx.fillStyle = '#fff';
+      
+      if (logoShape === 'circle') {
+        // Draw circular white background
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, (logoSize / 2) + padding, 0, 2 * Math.PI);
+        ctx.fill();
+      } else {
+        // Draw rectangular white background
+        ctx.fillRect(x - padding, y - padding, logoSize + 2 * padding, logoSize + 2 * padding);
+      }
     }
 
-    // Create offscreen canvas same size as QR
-    const canvas = document.createElement('canvas');
-    const size = qrCanvas.width; // assuming square canvas
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext('2d');
+    // Draw logo with border if specified
+    if (logoBorderColor) {
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = logoBorderColor;
 
-    // Draw QR code
-    ctx.drawImage(qrCanvas, 0, 0);
-
-    // Draw logo image on center
-    const logoImg = new Image();
-    logoImg.crossOrigin = 'anonymous';
-    logoImg.src = logoImage;
-
-    logoImg.onload = () => {
-      // Calculate position and size for logo on QR
-      const logoSize = logoScale; // same as user's setting
-      const x = (size - logoSize) / 2;
-      const y = (size - logoSize) / 2;
-
-      // Draw white background behind logo to simulate padding if enabled
-      if (logoPaddingEnabled) {
-        const padding = logoPadding;
-        ctx.fillStyle = '#fff';
-        
-        if (logoShape === 'circle') {
-          // Draw circular white background
-          ctx.beginPath();
-          ctx.arc(size / 2, size / 2, (logoSize / 2) + padding, 0, 2 * Math.PI);
-          ctx.fill();
-        } else {
-          // Draw rectangular white background
-          ctx.fillRect(x - padding, y - padding, logoSize + 2 * padding, logoSize + 2 * padding);
-        }
-      }
-
-      // Draw logo with border if specified
-      if (logoBorderColor) {
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = logoBorderColor;
-
-        if (logoShape === 'circle') {
-          const centerX = size / 2;
-          const centerY = size / 2;
-          const radius = logoSize / 2 + (logoPaddingEnabled ? logoPadding : 0);
-          ctx.beginPath();
-          ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-          ctx.stroke();
-        } else {
-          // square with rounded corners 8px radius
-          const borderRadius = 8;
-          const rectX = x - (logoPaddingEnabled ? logoPadding : 0);
-          const rectY = y - (logoPaddingEnabled ? logoPadding : 0);
-          const rectSize = logoSize + (logoPaddingEnabled ? logoPadding * 2 : 0);
-
-          ctx.beginPath();
-          ctx.moveTo(rectX + borderRadius, rectY);
-          ctx.lineTo(rectX + rectSize - borderRadius, rectY);
-          ctx.quadraticCurveTo(rectX + rectSize, rectY, rectX + rectSize, rectY + borderRadius);
-          ctx.lineTo(rectX + rectSize, rectY + rectSize - borderRadius);
-          ctx.quadraticCurveTo(rectX + rectSize, rectY + rectSize, rectX + rectSize - borderRadius, rectY + rectSize);
-          ctx.lineTo(rectX + borderRadius, rectY + rectSize);
-          ctx.quadraticCurveTo(rectX, rectY + rectSize, rectX, rectY + rectSize - borderRadius);
-          ctx.lineTo(rectX, rectY + borderRadius);
-          ctx.quadraticCurveTo(rectX, rectY, rectX + borderRadius, rectY);
-          ctx.closePath();
-          ctx.stroke();
-        }
-      }
-
-      // Draw the logo image itself
       if (logoShape === 'circle') {
-        // Clip to circle
-        ctx.save();
+        const centerX = size / 2;
+        const centerY = size / 2;
+        const radius = logoSize / 2 + (logoPaddingEnabled ? logoPadding : 0);
         ctx.beginPath();
-        ctx.arc(x + logoSize / 2, y + logoSize / 2, logoSize / 2, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.clip();
-        ctx.drawImage(logoImg, x, y, logoSize, logoSize);
-        ctx.restore();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        ctx.stroke();
       } else {
-        // square
-        ctx.drawImage(logoImg, x, y, logoSize, logoSize);
+        // square with rounded corners 8px radius
+        const borderRadius = 8;
+        const rectX = x - (logoPaddingEnabled ? logoPadding : 0);
+        const rectY = y - (logoPaddingEnabled ? logoPadding : 0);
+        const rectSize = logoSize + (logoPaddingEnabled ? logoPadding * 2 : 0);
+
+        ctx.beginPath();
+        ctx.moveTo(rectX + borderRadius, rectY);
+        ctx.lineTo(rectX + rectSize - borderRadius, rectY);
+        ctx.quadraticCurveTo(rectX + rectSize, rectY, rectX + rectSize, rectY + borderRadius);
+        ctx.lineTo(rectX + rectSize, rectY + rectSize - borderRadius);
+        ctx.quadraticCurveTo(rectX + rectSize, rectY + rectSize, rectX + rectSize - borderRadius, rectY + rectSize);
+        ctx.lineTo(rectX + borderRadius, rectY + rectSize);
+        ctx.quadraticCurveTo(rectX, rectY + rectSize, rectX, rectY + rectSize - borderRadius);
+        ctx.lineTo(rectX, rectY + borderRadius);
+        ctx.quadraticCurveTo(rectX, rectY, rectX + borderRadius, rectY);
+        ctx.closePath();
+        ctx.stroke();
       }
+    }
 
-      // Now download combined image
-      const mimeType = ext === 'jpg' ? 'image/jpeg' : 'image/png';
-      const link = document.createElement('a');
-      link.download = `qr-code.${ext}`;
-      link.href = canvas.toDataURL(mimeType);
-      link.click();
-    };
+    // Draw the logo image itself
+    if (logoShape === 'circle') {
+      // Clip to circle
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(x + logoSize / 2, y + logoSize / 2, logoSize / 2, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.clip();
+      ctx.drawImage(logoImg, x, y, logoSize, logoSize);
+      ctx.restore();
+    } else {
+      // square
+      ctx.drawImage(logoImg, x, y, logoSize, logoSize);
+    }
 
-    logoImg.onerror = () => {
-      // If logo fails to load, fallback to default QR download
-      qrCode.current.download({ extension: ext });
-    };
+    // Now download combined image
+    const mimeType = ext === 'jpg' ? 'image/jpeg' : 'image/png';
+    const link = document.createElement('a');
+    link.download = `qr-code.${ext}`;
+    link.href = canvas.toDataURL(mimeType);
+    link.click();
   };
+
+  logoImg.onerror = () => {
+    // If logo fails to load, fallback to default QR download
+    qrCode.current.download({ extension: ext });
+  };
+};
 
   return (
     <>
