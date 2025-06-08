@@ -1,12 +1,118 @@
-# React + Vite
+Here’s a professional, well-structured `README.md` file tailored for your **custom QR Code Generator** built with **React**, **Vite**, **Bootstrap**, and `qr-code-styling`. It highlights features, setup instructions, and usage:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+````markdown
+# 🎨 MakeMyQR - Custom QR Code Generator
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**MakeMyQR** is a highly customizable QR code generator built using **React + Vite**. It allows users to create stylish and branded QR codes with gradients, logos, and various styling options.
+Live link: `https://make-my-qr-git-main-evita-barbozas-projects.vercel.app/`
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Features
+
+- 🔗 **Link-to-QR**: Generate a QR code for any URL.
+- 🎨 **Gradient Colors**: Pick custom start and end colors for beautiful gradients.
+- 🧱 **QR Styles**: Choose from various dot and square styles.
+- 📐 **Custom Sizes**: Adjust the size of the QR code to your needs.
+- 🖼️ **Logo Support**:
+  - Upload a logo image.
+  - Customize logo size (0–100).
+  - Change logo border radius for square or circle appearance.
+- 💾 **Download Options**: Export your QR code as **PNG**, **JPG**, or **SVG**.
+- ⚙️ **Live Preview**: See changes applied instantly as you customize.
+
+
+---
+
+## 🛠️ Tech Stack
+
+- ⚛️ React (with Hooks)
+- ⚡ Vite (for fast development)
+- 🎨 Bootstrap 5
+- 🧩 [qr-code-styling](https://github.com/kozakdenys/qr-code-styling) library
+
+---
+
+## 📦 Installation
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/evitabarboza/MakeMyQR.git
+cd MakeMyQR
+npm install
+````
+
+---
+
+## 🧪 Running Locally
+
+To run the app locally:
+
+```bash
+npm run dev
+```
+
+Open your browser and navigate to:
+[http://localhost:5173](http://localhost:5173)
+
+---
+
+## 🖼️ Folder Structure
+
+```
+src/
+├── components/
+│   └── QRGenerator.jsx      # Main QR Code generation logic
+├── assets/                  # Logo placeholders and icons
+├── App.jsx
+├── main.jsx
+public/
+├── index.html
+```
+
+---
+
+## 📥 Download Options
+
+Users can export QR codes as:
+
+* `.png` (default)
+* `.jpg`
+* `.svg`
+
+---
+
+## ✅ Future Improvements
+
+* 🔄 QR code scanning preview
+* 🌙 Dark mode support
+* 📁 Preset saving (user preferences)
+* 🖱️ Drag & drop logo upload
+* 🧪 QR validation / error correction levels
+
+---
+
+## 🤝 Contributing
+
+Pull requests are welcome! For major changes, open an issue first to discuss what you'd like to change.
+
+---
+
+## 📄 License
+
+MIT © 2025 \[Evita Sharon Barboza]
+
+---
+
+## 💡 Credits
+
+Thanks to:
+
+* [qr-code-styling](https://github.com/kozakdenys/qr-code-styling)
+* [Bootstrap](https://getbootstrap.com)
+* [Vite](https://vitejs.dev)
+
+```
